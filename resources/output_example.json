@@ -1,7 +1,7 @@
 {
-  "case_id": "示例标识，非真实案例",
+  "case_id": "示例标识，非真实案例；真实运行时从 case.json 原样回填",
   "status": "success",
-  "paper_meta": {"title": "[示例论文标题]", "authors": [], "year": "", "source": ""},
+  "paper_meta": {"title": "[示例论文标题]", "authors": [], "year": "", "source": "", "version": "原文未述"},
   "sections": [
     {
       "section_id": "s2",
@@ -9,16 +9,37 @@
       "notes": [
         {
           "field": "result",
-          "claim": "[示例结论陈述]",
-          "evidence": "[示例原文短引]",
+          "claim": "[示例结论陈述，忠实转述]",
+          "evidence": "[示例原文短引 15-40 词]",
           "anchor": "p3:2",
           "confidence": "high"
+        },
+        {
+          "field": "limitation",
+          "claim": "[示例：作者自述的限制]",
+          "evidence": "[示例原文短引]",
+          "anchor": "p5:1",
+          "confidence": "high"
+        },
+        {
+          "field": "conclusion",
+          "claim": "[示例：由方法推断的判断，非作者原话]",
+          "evidence": "[示例原文短引]",
+          "anchor": "p6:3",
+          "confidence": "low"
         }
       ]
     }
   ],
-  "glossary": {"terms": []},
-  "verification": {"field_coverage": "示例：通过", "anchor_validity": "示例：通过", "fact_consistency": "示例：通过"},
-  "uncertainties": [],
-  "change_log": []
+  "glossary": {"terms": [{"term": "[缩写]", "canonical": "[统一写法]", "anchor": "p1:2"}]},
+  "verification": {
+    "field_coverage": "覆盖 7/9；dataset、reproduce_info 原文未述，已标注",
+    "anchor_validity": "回查成功 3/3",
+    "fact_consistency": "数值与限定词逐条比对通过",
+    "section_completeness": "原文 5 节 / 输出 5 节",
+    "notes_total": 3
+  },
+  "sources": [{"path": "/input/case.json", "pages": "p1-p6"}],
+  "uncertainties": [{"item": "[示例：图表为图片无法解析]", "reason": "文字层缺失", "anchor": "fig2"}],
+  "change_log": [{"change": "将 conclusion 条 confidence 由 high 降为 low", "reason": "回查发现为推断非作者主张", "result": "已修正"}]
 }
