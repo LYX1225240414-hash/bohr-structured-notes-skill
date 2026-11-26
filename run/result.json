@@ -1,0 +1,121 @@
+{
+  "case_id": "arXiv:2011.03269v1-abstract-trial",
+  "status": "partial",
+  "paper_meta": {
+    "title": "Singlet color center in oxygen-deficient TiO2",
+    "authors": ["未在输入摘要中提供"],
+    "year": "未在输入摘要中提供",
+    "source": "arXiv:2011.03269v1",
+    "version": "v1",
+    "note": "输入仅为摘要片段（p1-p3），非全文；章节与字段覆盖按摘要范围评估"
+  },
+  "sections": [
+    {
+      "section_id": "s1",
+      "title": "Abstract / 研究概述",
+      "notes": [
+        {
+          "field": "research_question",
+          "claim": "研究氧缺陷 TiO₂ 中一种色心的性质及其与氧空位的关系",
+          "evidence": "We report an experimental and computational study of a color center in oxygen-deficient TiO2.",
+          "anchor": "p1:2",
+          "confidence": "high"
+        },
+        {
+          "field": "term",
+          "claim": "该色心具有单重态基态，与金红石相和锐钛矿相中的氧空位相关",
+          "evidence": "The defect gives rise to a singlet ground state and is associated with oxygen vacancies in both rutile and anatase phases.",
+          "anchor": "p1:2",
+          "confidence": "high"
+        },
+        {
+          "field": "method",
+          "claim": "采用电子顺磁共振（EPR）与光谱学表征缺陷，并用密度泛函理论（DFT）计算确定原子结构",
+          "evidence": "Electron paramagnetic resonance and optical spectroscopy were used to characterize the defect, and density functional theory (DFT) calculations were performed to identify the atomic structure.",
+          "anchor": "p1:3",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "section_id": "s2",
+      "title": "Results / 结果",
+      "notes": [
+        {
+          "field": "result",
+          "claim": "该缺陷在可见光范围呈现特征吸收带，与氧空位的存在一致",
+          "evidence": "the defect exhibits a characteristic absorption band in the visible range, which is consistent with the presence of oxygen vacancies",
+          "anchor": "p2:1",
+          "confidence": "high"
+        },
+        {
+          "field": "result",
+          "claim": "DFT 计算表明单重态源自两个被俘获在相邻氧空位位的电子，而非单一孤立空位",
+          "evidence": "the singlet state originates from two electrons trapped at adjacent oxygen vacancy sites, rather than from a single isolated vacancy",
+          "anchor": "p2:2",
+          "confidence": "high"
+        },
+        {
+          "field": "conclusion",
+          "claim": "氧空位可在 TiO₂ 带隙内形成缺陷态，可能增强其可见光吸收（注意 may 的限定强度）",
+          "evidence": "oxygen vacancies can create defect states inside the band gap, which may enhance visible-light absorption in TiO2",
+          "anchor": "p2:3",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "section_id": "s3",
+      "title": "Discussion / 讨论与限制",
+      "notes": [
+        {
+          "field": "limitation",
+          "claim": "该色心在实际条件下对光催化活性的具体贡献仍待量化；对其他 TiO₂ 形貌的普适性未做检验",
+          "evidence": "the exact contribution of this color center to photocatalytic activity under real conditions remains to be quantified, and that the generalizability to other TiO2 morphologies was not examined",
+          "anchor": "p3:1",
+          "confidence": "high"
+        }
+      ]
+    }
+  ],
+  "glossary": {
+    "terms": [
+      {"term": "color center", "canonical": "色心", "anchor": "p1:2"},
+      {"term": "oxygen vacancy", "canonical": "氧空位", "anchor": "p1:2"},
+      {"term": "singlet ground state", "canonical": "单重态基态", "anchor": "p1:2"},
+      {"term": "rutile / anatase", "canonical": "金红石相 / 锐钛矿相", "anchor": "p1:2"},
+      {"term": "EPR", "canonical": "电子顺磁共振", "anchor": "p1:3"},
+      {"term": "DFT", "canonical": "密度泛函理论", "anchor": "p1:3"}
+    ]
+  },
+  "verification": {
+    "field_coverage": "摘要范围内已覆盖 research_question/method/result/conclusion/limitation/term；dataset/metric/reproduce_info 原文摘要未述，已在 uncertainties 标注",
+    "anchor_validity": "通过：7 条笔记 anchor 均指向输入中真实存在的段落 p1:2/p1:3/p2:1/p2:2/p2:3/p3:1",
+    "fact_consistency": "通过：数值/术语/限定词（may/can/remains to be quantified）原样保留；因果与相关未互换",
+    "section_completeness": "通过：输入为摘要片段，3 个语义段全部覆盖，无漏段"
+  },
+  "uncertainties": [
+    {
+      "item": "dataset / metric / reproduce_info 字段缺失",
+      "reason": "输入仅为摘要片段，未提供数据集、评价指标与可复现参数；若需完整笔记请提供全文",
+      "location": "全文"
+    },
+    {
+      "item": "status 为 partial",
+      "reason": "输入非论文全文，仅摘要片段，故按摘要范围交付，不冒充完整论文笔记",
+      "location": "paper_meta.note"
+    }
+  ],
+  "change_log": [
+    {
+      "issue": "初稿把 'may enhance' 写成 'enhances'，削弱了限定强度",
+      "fix": "回读原文 p2:3，恢复为 '可能增强' 并在 evidence 保留 may 原词",
+      "location": "s2 conclusion"
+    },
+    {
+      "issue": "初稿把 'two electrons trapped at adjacent sites' 简化为 '氧空位俘获电子'",
+      "fix": "恢复为两个电子、相邻氧空位位，保留 rather than 单一孤立空位的对比",
+      "location": "s2 result"
+    }
+  ]
+}
