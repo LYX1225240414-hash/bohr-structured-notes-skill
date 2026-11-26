@@ -1,0 +1,11 @@
+[真实论文摘要，来源 arXiv:2011.03269v1，作为结构化笔记试跑输入]
+
+Title: Singlet color center in oxygen-deficient TiO2
+
+Abstract (p1:1).
+p1:2 We report an experimental and computational study of a color center in oxygen-deficient TiO2. The defect gives rise to a singlet ground state and is associated with oxygen vacancies in both rutile and anatase phases.
+p1:3 Electron paramagnetic resonance and optical spectroscopy were used to characterize the defect, and density functional theory (DFT) calculations were performed to identify the atomic structure.
+p2:1 The results show that the defect exhibits a characteristic absorption band in the visible range, which is consistent with the presence of oxygen vacancies.
+p2:2 DFT calculations indicate that the singlet state originates from two electrons trapped at adjacent oxygen vacancy sites, rather than from a single isolated vacancy.
+p2:3 These findings suggest that oxygen vacancies can create defect states inside the band gap, which may enhance visible-light absorption in TiO2.
+p3:1 The authors note that the exact contribution of this color center to photocatalytic activity under real conditions remains to be quantified, and that the generalizability to other TiO2 morphologies was not examined.
