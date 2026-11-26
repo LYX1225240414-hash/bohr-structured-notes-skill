@@ -11,7 +11,7 @@
 
 ## 调用方式
 
-在 Agent 中加载本 Skill（目录 p06-skill/），把上述输入发给 Agent。Agent 按 SKILL.md 的 6 步执行，输出 result.json。
+在 Agent 中加载本 Skill，把上述输入发给 Agent。Agent 按 SKILL.md 的 6 步执行：读输入边界 → 章节对齐 → 字段化抽取 → 术语表 → 三重自检回修 → 输出。运行结果写到 `/app/output/result.json`（本地演示时写到本地输出目录），case_id 从输入的 case.json 原样回填。
 
 ## 示意输出
 
