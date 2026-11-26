@@ -1,0 +1,24 @@
+{
+  "case_id": "示例标识，非真实案例",
+  "status": "success",
+  "paper_meta": {"title": "[示例论文标题]", "authors": [], "year": "", "source": ""},
+  "sections": [
+    {
+      "section_id": "s2",
+      "title": "[示例章节名]",
+      "notes": [
+        {
+          "field": "result",
+          "claim": "[示例结论陈述]",
+          "evidence": "[示例原文短引]",
+          "anchor": "p3:2",
+          "confidence": "high"
+        }
+      ]
+    }
+  ],
+  "glossary": {"terms": []},
+  "verification": {"field_coverage": "示例：通过", "anchor_validity": "示例：通过", "fact_consistency": "示例：通过"},
+  "uncertainties": [],
+  "change_log": []
+}
