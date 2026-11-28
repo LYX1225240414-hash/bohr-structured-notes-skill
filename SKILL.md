@@ -49,7 +49,11 @@ description: 把科研论文转化为章节对齐、字段齐备、逐条可回�
 
 **字段字典（notes.field）**：`research_question` / `motivation` / `method` / `dataset` / `metric` / `result` / `conclusion` / `limitation` / `reproduce_info` / `term`。
 
-**锚点格式（anchor）**：`p<页>:<段号>` / `sec:<章节名>` 或 `sec:<章节名>/p<段号>` / `fig<号>` / `tab<号>` / `eq<号>` / `line:<起>-<止>`，必须指向原文真实位置。`sec:` 后的章节名要与原文标题一致（英文论文写 `sec:Introduction`，中文论文写 `sec:引言`，脚本按中英等价组识别）。
+**锚点格式（anchor）**：`p<页>:<段号>` / `p<页>:L<行号>` / `L<行号>`（或 `line <行号>`）/ `sec:<章节名>` 或 `sec:<章节名>/p<段号>` / `fig<号>` / `tab<号>` / `eq<号>` / `line:<起>-<止>`，必须指向原文真实位置。`sec:` 后的章节名要与原文标题一致（英文论文写 `sec:Introduction`，中文论文写 `sec:引言`，脚本按中英等价组识别）。
+
+- 源文件是 markdown/txt（无分页）时，用 `L<行号>` 或 `p<页>:L<行号>` 最稳：脚本按原文总行数校验，超界才判 `unresolved`。
+- `p<页>:<段号>` 在无分页的源上只能判 `unverifiable`（不算错，但需人工抽查）；因此纯文本材料优先用行号锚点。
+- 多个位置用 `;` 分隔（`sec:Methods; tab2`），任一段无法解析即整条判 `unresolved`。
 
 ## 工作流
 
