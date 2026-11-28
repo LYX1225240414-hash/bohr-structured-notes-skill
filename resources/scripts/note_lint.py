@@ -32,6 +32,24 @@ from collections import Counter, defaultdict
 from difflib import SequenceMatcher
 from pathlib import Path
 
+
+def _as_outfile(p, default_name):
+    """--out 兼容层：传目录则写入目录下 default_name，传文件名则直接写该文件。"""
+    path = Path(p)
+    if path.is_dir() or not path.suffix:
+        path = path / default_name
+    path.parent.mkdir(parents=True, exist_ok=True)
+    return path
+
+
+def _as_outdir(p):
+    """--out 兼容层：传的是文件名时取其父目录，避免把文件路径当目录用而崩溃。"""
+    path = Path(p)
+    if path.suffix.lower() in (".json", ".md", ".txt", ".yaml", ".yml", ".csv", ".tex", ".bib"):
+        path = path.parent if str(path.parent) not in ("", ".") else Path(".")
+    path.mkdir(parents=True, exist_ok=True)
+    return path
+
 FIELDS = ["research_question", "motivation", "method", "dataset", "metric",
           "result", "conclusion", "limitation", "reproduce_info"]
 CONFIDENCE = {"high", "medium", "low"}
@@ -197,8 +215,8 @@ def cmd_outline(args):
            "paragraph_count": len(paras), "page_count": count_pages(src),
            "max_fig": max_ref(src, "fig"), "max_tab": max_ref(src, "tab"),
            "max_eq": max_ref(src, "eq")}
-    Path(args.out).mkdir(parents=True, exist_ok=True)
-    p = Path(args.out) / "outline.json"
+    _d = _as_outdir(args.out)
+    p = _d / "outline.json"
     p.write_text(json.dumps(out, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps({"ok": True, "section_count": out["section_count"],
                       "paragraphs": out["paragraph_count"], "pages": out["page_count"],
@@ -214,6 +232,10 @@ ANCHOR_SEC = re.compile(r"^(?:sec\s*[:：])?(.+?)\s*[:：/]\s*[ps]?(\d{1,4})$", 
 ANCHOR_SEC_ONLY = re.compile(r"^(?:sec\s*[:：])?(.+)$", re.I)
 ANCHOR_REF = re.compile(r"^(fig|tab|eq|table|figure)\s*(\d{1,3})[a-z]?$", re.I)
 ANCHOR_LINE = re.compile(r"^line\s*[:：]\s*(\d+)\s*-\s*(\d+)$", re.I)
+# 页:行 与 单行 两种最常见写法（p1:L3 / L12 / line 12），旧实现只认 p1:3 与 line:3-9，
+# 遇到 p1:L3 会落到"不符合任何可识别格式"，把正确锚点全判成 unresolved。
+ANCHOR_PL = re.compile(r"^p?(\d{1,4})\s*[:：]\s*[Ll]\s*(\d{1,4})$")
+ANCHOR_L = re.compile(r"^(?:[Ll]|line)\s*[:：]?\s*(\d{1,4})$")
 
 
 def _section_hit(name, titles):
@@ -230,9 +252,24 @@ def check_anchor(anchor, ctx):
     a = str(anchor or "").strip()
     if not a:
         return "unresolved", "anchor 为空"
+    total_lines = ctx.get("lines") or 0
     for piece in [x.strip() for x in re.split(r"[;；]", a) if x.strip()]:
         m = ANCHOR_LINE.match(piece)
         if m:
+            continue
+        m = ANCHOR_PL.match(piece)
+        if m:
+            page, line_no = int(m.group(1)), int(m.group(2))
+            if ctx["pages"] and page > ctx["pages"]:
+                return "unresolved", f"页号 {page} 超出原文页数 {ctx['pages']}"
+            if total_lines and line_no > total_lines:
+                return "unresolved", f"行号 {line_no} 超出原文总行数 {total_lines}"
+            continue
+        m = ANCHOR_L.match(piece)
+        if m:
+            line_no = int(m.group(1))
+            if total_lines and line_no > total_lines:
+                return "unresolved", f"行号 {line_no} 超出原文总行数 {total_lines}"
             continue
         m = ANCHOR_P.match(piece)
         if m:
@@ -283,7 +320,7 @@ def cmd_check(args):
 
     notes, sec_titles = flat_notes(obj)
     outline = extract_outline(src)
-    ctx = {"pages": count_pages(src),
+    ctx = {"pages": count_pages(src), "lines": len(src.splitlines()),
            "paragraphs": len([b for b in re.split(r"\n\s*\n", src) if b.strip()]),
            "max_fig": max_ref(src, "fig"), "max_tab": max_ref(src, "tab"),
            "max_eq": max_ref(src, "eq"),
@@ -522,7 +559,7 @@ def cmd_check(args):
         },
     }
 
-    outdir = Path(args.out)
+    outdir = _as_outdir(args.out)
     outdir.mkdir(parents=True, exist_ok=True)
     (outdir / "note_report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     write_md(report, outdir / "note_report.md")
@@ -605,7 +642,7 @@ def cmd_index(args):
            "by_field": {k: len(v) for k, v in by_field.items()},
            "by_section": {k: len(v) for k, v in by_section.items()},
            "terms": sorted(by_term)}
-    outdir = Path(args.out)
+    outdir = _as_outdir(args.out)
     outdir.mkdir(parents=True, exist_ok=True)
     (outdir / "index.json").write_text(json.dumps(idx, ensure_ascii=False, indent=2), encoding="utf-8")
 
