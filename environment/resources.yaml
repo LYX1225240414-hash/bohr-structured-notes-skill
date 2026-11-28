@@ -1,10 +1,11 @@
 name: structured-paper-notes
-version: 1.2.0
+version: 1.3.0
 entrypoint: ../SKILL.md
 bundle_root: ..
 description: >
   结构化论文笔记 Skill 的资源清单。执行内核为 resources/scripts/note_lint.py，
-  负责从原文抽章节骨架并给出锚点校验边界，再把笔记与原文机械比对，
+  init 先落盘合同骨架，outline 从原文抽章节骨架并给出锚点校验边界，
+  再把笔记与原文机械比对，
   检出套模板章节、漏章、锚点错指、编造引文、数值抄错、重复笔记与术语未落实。
 
 resources:
