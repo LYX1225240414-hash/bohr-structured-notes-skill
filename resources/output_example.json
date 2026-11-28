@@ -1,45 +1,86 @@
 {
   "case_id": "示例标识，非真实案例；真实运行时从 case.json 原样回填",
+  "_note": "本文件仅为字段结构示意，不含任何真实论文内容、真实笔记或评测成绩。字段规范见 resources/field_dict.md。",
   "status": "success",
   "paper_meta": {"title": "[示例论文标题]", "authors": [], "year": "", "source": "", "version": "原文未述"},
   "sections": [
     {
       "section_id": "s2",
-      "title": "[示例章节名]",
+      "title": "[示例章节名：须用原文真实标题]",
       "notes": [
         {
           "field": "result",
-          "claim": "[示例结论陈述，忠实转述]",
-          "evidence": "[示例原文短引 15-40 词]",
+          "claim": "[示例结论陈述，忠实转述；数值须能在本条 evidence 中找到]",
+          "evidence": "[示例原文短引 15-40 词，须能逐字回查]",
           "anchor": "p3:2",
-          "confidence": "high"
+          "confidence": "high",
+          "tags": ["[示例标签1]", "[示例标签2]"]
         },
         {
           "field": "limitation",
           "claim": "[示例：作者自述的限制]",
           "evidence": "[示例原文短引]",
-          "anchor": "p5:1",
-          "confidence": "high"
+          "anchor": "sec:结论/p1",
+          "confidence": "high",
+          "tags": ["[示例标签]"]
         },
         {
           "field": "conclusion",
           "claim": "[示例：由方法推断的判断，非作者原话]",
           "evidence": "[示例原文短引]",
-          "anchor": "p6:3",
-          "confidence": "low"
+          "anchor": "fig2",
+          "confidence": "low",
+          "tags": ["[示例标签]"]
         }
       ]
     }
   ],
   "glossary": {"terms": [{"term": "[缩写]", "canonical": "[统一写法]", "anchor": "p1:2"}]},
   "verification": {
-    "field_coverage": "覆盖 7/9；dataset、reproduce_info 原文未述，已标注",
-    "anchor_validity": "回查成功 3/3",
-    "fact_consistency": "数值与限定词逐条比对通过",
-    "section_completeness": "原文 5 节 / 输出 5 节",
-    "notes_total": 3
+    "section_alignment": {"result": "pass", "evidence": "示例：原文 0 节 / 笔记 0 节；匹配 0；套模板 0；漏章 0；顺序错 0"},
+    "anchor_retrievability": {"result": "pass", "evidence": "示例：锚点 0 条；无法解析 0；无法机械校验 0；可校验成功率 0"},
+    "field_coverage": {"result": "partial", "evidence": "示例：核心字段 0 / 9；无字段笔记 0 条；原文未述字段已标注"},
+    "evidence_fidelity": {"result": "pass", "evidence": "示例：短引 0 条；原文查不到 0 条"},
+    "numeric_fidelity": {"result": "pass", "evidence": "示例：数值原文查不到 0 项；claim 数值不在 evidence 中 0 条"},
+    "consistency": {"result": "pass", "evidence": "示例：重复 0 组；同一对象多取值 0 组"},
+    "reusability": {"result": "pass", "evidence": "示例：confidence 覆盖 0；tags 覆盖 0；术语表 0 条"},
+    "no_new_facts": {"result": "na", "evidence": "示例：需人工核对转述是否把「相关」写成「因果」，脚本测不出"}
   },
-  "sources": [{"path": "/input/case.json", "pages": "p1-p6"}],
-  "uncertainties": [{"item": "[示例：图表为图片无法解析]", "reason": "文字层缺失", "anchor": "fig2"}],
-  "change_log": [{"change": "将 conclusion 条 confidence 由 high 降为 low", "reason": "回查发现为推断非作者主张", "result": "已修正"}]
+  "note_report": {
+    "section_alignment": {"source_section_count": 0, "note_section_count": 0, "matched_count": 0,
+                          "unmatched_count": 0, "missing_count": 0, "order_mismatch_count": 0},
+    "anchors": {"total": 0, "unresolved_count": 0, "unverifiable_count": 0},
+    "fields": {"covered_count": 0, "missing_count": 0, "notes_without_field": 0},
+    "evidence": {"total": 0, "not_found_count": 0},
+    "numbers": {"orphan_count": 0, "claim_evidence_gap_count": 0},
+    "duplicate_count": 0,
+    "contradiction_count": 0,
+    "glossary": {"terms": 0, "missing_count": 0, "drift_count": 0},
+    "_source": "示例：真实运行时必须原样转述 /app/output/note_report.json，不得另算一套"
+  },
+  "index": {
+    "note_count": 0,
+    "by_field": {"[示例字段]": 0},
+    "by_section": {"[示例章节]": 0},
+    "terms": ["[示例标签]"],
+    "_source": "示例：取自 /app/output/index.json，证明笔记可检索、可并排比较"
+  },
+  "gain_record": {
+    "conditions": {"same_source": true, "same_rules": true, "same_budget": true, "same_task": true},
+    "mode": "B_single_run_two_drafts",
+    "baseline": {"notes": "/app/work/notes_blind.json", "note": "示例：按通用摘要模板通读一遍写出的笔记"},
+    "with_skill": {"notes": "/app/output/notes.json", "note": "示例：以 outline.json 为骨架产出的定稿"},
+    "delta_note": "示例：套模板章节与锚点不可解析数的变化须由两次 check 的真实计数填入；测不出写 na",
+    "verifiable_artifacts": ["/app/output/note_report.json", "/app/output/note_report.md", "/app/output/index.json"]
+  },
+  "sources": [{"path": "/input/case.json", "role": "案例输入与 output_contract"},
+              {"path": "/app/work/source.txt", "pages": "p1-p6", "ocr_used": false}],
+  "uncertainties": [
+    {"item": "[示例：图 2 为图片，内部数值无法读取]", "reason": "文字层缺失，仅有图注",
+     "anchor": "fig2", "handover": "需人工读图补录，或提供原始数据表"}
+  ],
+  "change_log": [
+    {"change": "将 conclusion 条 confidence 由 high 降为 low",
+     "reason": "回查发现为推断非作者主张", "result": "已修正", "round": 1}
+  ]
 }
