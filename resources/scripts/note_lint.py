@@ -669,9 +669,70 @@ def cmd_index(args):
     return 0
 
 
+
+def _blank_contract_value(v):
+    """合同字段的空占位：形状对、内容空，绝不复制合同示例当作答案。"""
+    if isinstance(v, dict):
+        return {}
+    if isinstance(v, list):
+        return []
+    if isinstance(v, bool):
+        return False
+    if isinstance(v, (int, float)):
+        return 0
+    return ""
+
+def cmd_init(args):
+    """读真实 case.json，先落盘含全部合同字段的 partial result.json 骨架。"""
+    try:
+        case = json.loads(Path(args.case).read_text(encoding="utf-8"))
+    except Exception as exc:
+        print(json.dumps({"ok": False, "error": "case.json 无法读取: %s" % exc}, ensure_ascii=False))
+        return 1
+    if not isinstance(case, dict):
+        print(json.dumps({"ok": False, "error": "case.json 顶层必须是对象"}, ensure_ascii=False))
+        return 1
+    contract = case.get("output_contract") or {}
+    if not isinstance(contract, dict):
+        contract = {}
+    skeleton = {
+        "case_id": case.get("case_id", "N/A"),
+        "status": "partial",
+        "paper_meta": {"title": "原文未述", "authors": "原文未述", "year": "原文未述", "source": "原文未述"},
+        "sections": [],
+        "notes": [],
+        "glossary": [],
+        "verification": {k: {"result": "na", "evidence": "pending"} for k in
+                         ["section_alignment", "anchor_retrievability", "field_coverage", "evidence_fidelity",
+                          "numeric_fidelity", "consistency", "reusability", "no_new_facts"]},
+        "note_report": {},
+        "index": {},
+        "gain_record": {"conditions": "na", "mode": "na", "baseline": "na", "with_skill": "na",
+                        "delta_note": "尚未产生对照产物", "verifiable_artifacts": []},
+        "uncertainties": [],
+        "sources": [str(args.case)],
+        "change_log": [{"issue": "initialized", "fix": "先写合同骨架，内容待真实笔记填充",
+                        "location": "result.json", "verified": "file exists"}],
+
+    }
+    for key, value in contract.items():
+        if key not in skeleton or skeleton[key] in (None, "", [], {}):
+            skeleton[key] = _blank_contract_value(value)
+    skeleton["contract_values"] = contract
+    outdir = _as_outdir(args.out)
+    target = outdir / "result.json"
+    target.write_text(json.dumps(skeleton, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(json.dumps({"ok": True, "case_id": skeleton["case_id"],
+                      "contract_fields": len(contract), "status": "partial", "out": str(target)},
+                     ensure_ascii=False))
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser(description="结构化论文笔记核验器")
     sub = ap.add_subparsers(dest="cmd", required=True)
+
+    ini = sub.add_parser("init"); ini.add_argument("--case", required=True); ini.add_argument("--out", required=True)
 
     o = sub.add_parser("outline"); o.add_argument("--source", required=True); o.add_argument("--out", required=True)
     c = sub.add_parser("check"); c.add_argument("--source", required=True)
@@ -679,7 +740,7 @@ def main():
     i = sub.add_parser("index"); i.add_argument("--notes", required=True); i.add_argument("--out", required=True)
 
     a = ap.parse_args()
-    return {"outline": cmd_outline, "check": cmd_check, "index": cmd_index}[a.cmd](a) or 0
+    return {"outline": cmd_outline, "check": cmd_check, "index": cmd_index, "init": cmd_init}[a.cmd](a) or 0
 
 
 if __name__ == "__main__":
