@@ -1,0 +1,57 @@
+name: structured-paper-notes
+version: 1.1.0
+entrypoint: ../SKILL.md
+bundle_root: ..
+description: >
+  结构化论文笔记 Skill 的资源清单。执行内核为 resources/scripts/note_lint.py，
+  负责从原文抽章节骨架并给出锚点校验边界，再把笔记与原文机械比对，
+  检出套模板章节、漏章、锚点错指、编造引文、数值抄错、重复笔记与术语未落实。
+
+resources:
+  - path: resources/scripts/note_lint.py
+    kind: executable
+    runtime: python3
+    entry: "python3 resources/scripts/note_lint.py"
+    subcommands: [outline, check, index]
+    requires: []          # 纯标准库，无第三方依赖，可完全离线
+    inputs:
+      - "原文纯文本（.txt/.md；PDF 需先用平台 pdf-text-tool 抽文字层）"
+      - "notes.json（sections[].notes 嵌套或 notes 顶层数组，两种结构都支持）"
+    outputs:
+      - "/app/work/outline.json"
+      - "/app/output/note_report.json"
+      - "/app/output/note_report.md"
+      - "/app/output/index.md"
+      - "/app/output/index.json"
+    outputs_note: >
+      note_report 的 verification_hint 直接给出 section_alignment /
+      anchor_retrievability / field_coverage / evidence_fidelity / numeric_fidelity /
+      consistency / reusability 七项的计数口径，可原样写入 result.json 的 verification。
+
+  - path: resources/checklist.md
+    kind: doc
+    purpose: 带计数模板的自检清单，对应 verification 八项
+
+  - path: resources/field_dict.md
+    kind: doc
+    purpose: 字段字典、confidence 判定、锚点格式与示例笔记结构
+
+  - path: resources/gain_protocol.md
+    kind: doc
+    purpose: 使用增益对照协议（同原文同解析方式下，加载 Skill vs 不加载的记录方法）
+
+  - path: resources/output_example.json
+    kind: sample
+    purpose: 输出结构示意（占位，非任何真实论文的笔记）
+
+  - path: examples/README.md
+    kind: doc
+    purpose: 最小调用示例与从原文到核验报告、索引的完整步骤
+
+runtime:
+  python: ">=3.9"
+  network: not_required
+  notes: >
+    脚本只读原文与笔记，不改动输入。锚点校验分三态：ok（可解析且边界内）、
+    unresolved（指向不存在的章节或超出原文图号——必须改）、unverifiable（原文无分页符等，
+    只能人工抽查）。中英章节名走等价组，笔记把 Introduction 译成"引言"不算套模板。
