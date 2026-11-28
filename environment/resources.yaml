@@ -1,5 +1,5 @@
 name: structured-paper-notes
-version: 1.1.0
+version: 1.2.0
 entrypoint: ../SKILL.md
 bundle_root: ..
 description: >
@@ -55,3 +55,6 @@ runtime:
     脚本只读原文与笔记，不改动输入。锚点校验分三态：ok（可解析且边界内）、
     unresolved（指向不存在的章节或超出原文图号——必须改）、unverifiable（原文无分页符等，
     只能人工抽查）。中英章节名走等价组，笔记把 Introduction 译成"引言"不算套模板。
+
+changelog:
+  - "1.2.0: 锚点支持 p<页>:L<行>、L<行>、line <行>，纯文本材料可按总行数校验；--out 兼容目录或文件名。"
