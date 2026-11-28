@@ -43,6 +43,9 @@
 ```bash
 L=/skills/weekly-skill/resources/scripts/note_lint.py
 
+# 0) 落盘合同骨架：case_id + output_contract 全字段，status=partial（空占位，不是答案）
+python3 "$L" init --case /input/case.json --out /app/output
+
 # 1) 抽原文骨架：拿到真实章节名与 max_fig / max_tab / max_eq（锚点校验边界）
 python3 "$L" outline --source /app/work/source.txt --out /app/work
 
